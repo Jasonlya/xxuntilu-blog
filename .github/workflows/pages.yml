@@ -1,0 +1,45 @@
+name: Build and deploy Hugo site to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Hugo (Extended)
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.115.2'
+          extended: true
+
+      - name: Build site
+        run: hugo --minify
+
+      - name: Upload built site (artifact for Pages)
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v3
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1

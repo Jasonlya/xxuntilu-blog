@@ -1,0 +1,5 @@
+baseURL = "https://xxuntilu.io/"
+title = "xxuntilu"
+languageCode = "zh-CN"
+theme = "ananke"
+publishDir = "public"
