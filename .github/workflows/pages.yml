@@ -20,14 +20,14 @@ jobs:
       - name: Setup Hugo (Extended)
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: '0.115.2'
+          hugo-version: "0.168.0"
           extended: true
 
       - name: Build site
         run: hugo --minify
 
-      - name: Upload built site (artifact for Pages)
-        uses: actions/upload-pages-artifact@v1
+      - name: Upload built site
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./public
 
@@ -39,7 +39,7 @@ jobs:
       id-token: write
     steps:
       - name: Configure GitHub Pages
-        uses: actions/configure-pages@v3
+        uses: actions/configure-pages@v5
 
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
