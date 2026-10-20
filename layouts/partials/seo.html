@@ -3,6 +3,11 @@
   {{- $description = .Summary | plainify | truncate 160 -}}
 {{- end -}}
 {{- $title := cond .IsHome site.Title (printf "%s · %s" .Title site.Title) -}}
+{{- if eq .Kind "taxonomy" -}}
+  {{- if eq .Data.Plural "categories" -}}{{- $title = printf "分类 · %s" site.Title -}}
+  {{- else if eq .Data.Plural "tags" -}}{{- $title = printf "标签 · %s" site.Title -}}
+  {{- end -}}
+{{- end -}}
 {{- if eq .Kind "404" -}}{{- $title = printf "页面不存在 · %s" site.Title -}}{{- end -}}
 <title>{{ $title }}</title>
 <meta name="description" content="{{ $description }}" />
@@ -12,7 +17,7 @@
 <link rel="alternate" type="application/json" href="{{ "index.json" | absURL }}" title="{{ site.Title }} 搜索索引" />
 <link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml" />
 <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)" />
-<meta name="theme-color" content="#0e1014" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
 <meta property="og:locale" content="zh_CN" />
 <meta property="og:type" content="{{ cond .IsPage "article" "website" }}" />
 <meta property="og:site_name" content="{{ site.Title }}" />

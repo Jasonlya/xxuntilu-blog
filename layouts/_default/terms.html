@@ -1,8 +1,9 @@
 {{ define "main" }}
+{{ $isCategories := eq .Data.Plural "categories" }}
 <header class="page-head">
-  <p class="eyebrow">Topics</p>
-  <h1>{{ .Title }}</h1>
-  <p>按主题浏览文章，找到你关心的方向。</p>
+  <p class="eyebrow">{{ if $isCategories }}分类{{ else }}标签{{ end }}</p>
+  <h1>{{ if $isCategories }}分类{{ else }}标签{{ end }}</h1>
+  <p>{{ if $isCategories }}按分类浏览文章，找到你关心的方向。{{ else }}按标签浏览文章，快速定位相关内容。{{ end }}</p>
 </header>
 
 <div class="page-body">
