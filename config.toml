@@ -1,5 +1,5 @@
 baseURL = "https://Jasonlya.github.io/xxuntilu-blog/"
 title = "xxuntilu"
-languageCode = "zh-CN"
+locale = "zh-CN"
 theme = "ananke"
 publishDir = "public"
