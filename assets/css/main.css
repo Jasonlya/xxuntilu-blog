@@ -337,6 +337,14 @@ main { min-height: 64vh; }
 
 .featured.no-cover { grid-template-columns: 1fr; }
 
+.home-empty {
+  min-height: 260px;
+  align-items: center;
+}
+
+.home-empty h2 { max-width: 720px; }
+.home-empty .featured-excerpt { max-width: 640px; }
+
 .featured-label {
   margin-bottom: 13px;
   color: var(--accent);
@@ -565,6 +573,7 @@ main { min-height: 64vh; }
 .side-list a { color: var(--ink-soft); font-size: 14px; line-height: 1.45; }
 .side-list a:hover { color: var(--accent); }
 .side-list time { display: block; margin-top: 2px; color: var(--faint); font-size: 11px; }
+.side-empty { margin: 0; color: var(--faint); font-size: 14px; line-height: 1.55; }
 
 .empty-state {
   padding: 36px 0;

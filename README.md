@@ -25,7 +25,9 @@ xxuntilu 的个人技术博客，使用 Hugo 构建，通过 GitHub Actions 自�
 3. 选择仓库，进入“文章”集合，即可新增、编辑、删除文章。
 4. 新文章默认是草稿；把“草稿”关掉并保存后，GitHub Actions 会自动构建发布。
 
-在后台里可以直接设置标题、发布日期、摘要、分类、标签、封面图和正文，不需要手改 Markdown。每次保存都会向 GitHub 提交一次 commit，随后 Pages 自动重新部署。
+仓库内的示例文章已经清空，日常文章统一通过 Pages CMS 管理。在后台里可以直接设置标题、发布日期、摘要、分类、标签、封面图和正文，不需要手改 Markdown。每次保存都会向 GitHub 提交一次 commit，随后 GitHub Actions 自动重新部署。
+
+`content/posts/_index.md` 是“文章”栏目本身，不属于文章内容，请保留该文件。
 
 ## 本地开发
 
@@ -34,31 +36,6 @@ hugo server -D
 ```
 
 打开 http://localhost:1313/xxuntilu-blog/ 。
-
-## 手动新建文章
-
-```bash
-hugo new content posts/my-new-post.md
-```
-
-文章默认是草稿。常用 front matter：
-
-```yaml
----
-title: "文章标题"
-date: 2026-10-20T09:00:00+08:00
-draft: false
-featured: false
-categories:
-  - 自动化测试
-tags:
-  - pytest
-description: "显示在列表和搜索结果里的摘要。"
-cover: ""
----
-```
-
-`featured: true` 会让文章优先成为首页推荐；`cover` 可选，图片放在 `static/images/`，填写 `/images/your-image.jpg`。
 
 ## 构建与部署
 

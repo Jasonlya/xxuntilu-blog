@@ -16,22 +16,32 @@
     </div>
   </header>
 
-  {{ with index $featuredList 0 }}
-    <article class="featured{{ if not .Params.cover }} no-cover{{ end }}">
-      <div>
-        <div class="featured-label">最新文章</div>
-        <div class="post-meta">
-          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format (site.Params.dateFormat | default "2006-01-02") }}</time>
-          {{ with .GetTerms "categories" }}{{ with index . 0 }}<a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}{{ end }}
-          <span>{{ .ReadingTime }} 分钟阅读</span>
+  {{ if $posts }}
+    {{ with index $featuredList 0 }}
+      <article class="featured{{ if not .Params.cover }} no-cover{{ end }}">
+        <div>
+          <div class="featured-label">最新文章</div>
+          <div class="post-meta">
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format (site.Params.dateFormat | default "2006-01-02") }}</time>
+            {{ with .GetTerms "categories" }}{{ with index . 0 }}<a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}{{ end }}
+            <span>{{ .ReadingTime }} 分钟阅读</span>
+          </div>
+          <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+          <p class="featured-excerpt">{{ .Summary | plainify | truncate 180 }}</p>
+          <a class="read-link" href="{{ .RelPermalink }}">阅读全文 →</a>
         </div>
-        <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
-        <p class="featured-excerpt">{{ .Summary | plainify | truncate 180 }}</p>
-        <a class="read-link" href="{{ .RelPermalink }}">阅读全文 →</a>
+        {{ with .Params.cover }}
+          <div class="featured-cover"><img src="{{ strings.TrimPrefix "/" . | relURL }}" alt="" loading="lazy" /></div>
+        {{ end }}
+      </article>
+    {{ end }}
+  {{ else }}
+    <article class="featured no-cover home-empty">
+      <div>
+        <div class="featured-label">内容准备中</div>
+        <h2>第一篇文章正在准备中。</h2>
+        <p class="featured-excerpt">这里会持续记录自动化测试、质量工程、CI/CD 与 AI Agent 评测的实践和思考，文章发布后会第一时间出现在这里。</p>
       </div>
-      {{ with .Params.cover }}
-        <div class="featured-cover"><img src="{{ strings.TrimPrefix "/" . | relURL }}" alt="" loading="lazy" /></div>
-      {{ end }}
     </article>
   {{ end }}
 
@@ -42,22 +52,26 @@
         <a href="{{ "index.xml" | relURL }}">RSS 订阅</a>
       </div>
 
-      {{ $rest := after 1 $posts }}
-      {{ range $rest }}
-        <article class="post-row">
-          <time class="post-row-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
-          <div>
-            <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
-            <p class="post-excerpt">{{ .Summary | plainify | truncate 150 }}</p>
-            <div class="post-tags">
-              {{ with .GetTerms "categories" }}{{ with index . 0 }}<a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}{{ end }}
-              {{ range first 3 (.GetTerms "tags") }}<a href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a>{{ end }}
+      {{ if $posts }}
+        {{ $rest := after 1 $posts }}
+        {{ range $rest }}
+          <article class="post-row">
+            <time class="post-row-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+            <div>
+              <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+              <p class="post-excerpt">{{ .Summary | plainify | truncate 150 }}</p>
+              <div class="post-tags">
+                {{ with .GetTerms "categories" }}{{ with index . 0 }}<a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}{{ end }}
+                {{ range first 3 (.GetTerms "tags") }}<a href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a>{{ end }}
+              </div>
             </div>
-          </div>
-          {{ with .Params.cover }}<div class="row-cover"><img src="{{ strings.TrimPrefix "/" . | relURL }}" alt="" loading="lazy" /></div>{{ end }}
-        </article>
+            {{ with .Params.cover }}<div class="row-cover"><img src="{{ strings.TrimPrefix "/" . | relURL }}" alt="" loading="lazy" /></div>{{ end }}
+          </article>
+        {{ else }}
+          <p class="empty-state">更多文章正在整理中。</p>
+        {{ end }}
       {{ else }}
-        <p class="empty-state">更多文章正在整理中。</p>
+        <p class="empty-state">文章发布后会显示在这里。</p>
       {{ end }}
     </section>
 
@@ -73,6 +87,8 @@
         <div class="topics">
           {{ range first 10 site.Taxonomies.tags.ByCount }}
             <a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }} <span>{{ .Count }}</span></a>
+          {{ else }}
+            <p class="side-empty">发布文章后会自动生成主题标签。</p>
           {{ end }}
         </div>
       </div>
@@ -82,6 +98,8 @@
         <ul class="side-list">
           {{ range first 4 $posts }}
             <li><a href="{{ .RelPermalink }}">{{ .Title }}<time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time></a></li>
+          {{ else }}
+            <li class="side-empty">还没有发布文章。</li>
           {{ end }}
         </ul>
       </div>
