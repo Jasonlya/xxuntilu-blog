@@ -1,5 +1,79 @@
 baseURL = "https://Jasonlya.github.io/xxuntilu-blog/"
 title = "xxuntilu"
 locale = "zh-CN"
-theme = "ananke"
+defaultContentLanguage = "zh"
+timeZone = "Asia/Shanghai"
 publishDir = "public"
+enableRobotsTXT = true
+hasCJKLanguage = true
+summaryLength = 120
+titleCaseStyle = "none"
+
+[params]
+  description = "xxuntilu 的技术博客，记录自动化测试、质量工程、CI/CD 与 AI Agent 评测。"
+  author = "xxuntilu"
+  github = "https://github.com/Jasonlya"
+  dateFormat = "2006-01-02"
+
+  [params.giscus]
+    repo = ""
+    repoId = ""
+    category = "Announcements"
+    categoryId = ""
+    mapping = "pathname"
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  section = ["HTML", "RSS"]
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    style = "github-dark"
+    noClasses = true
+    lineNos = false
+
+[related]
+  includeNewer = true
+  threshold = 80
+  toLower = false
+
+  [[related.indices]]
+    name = "tags"
+    weight = 100
+
+  [[related.indices]]
+    name = "categories"
+    weight = 80
+
+[[menus.main]]
+  name = "首页"
+  pageRef = "/"
+  weight = 10
+
+[[menus.main]]
+  name = "文章"
+  pageRef = "/posts"
+  weight = 20
+
+[[menus.main]]
+  name = "归档"
+  pageRef = "/archive"
+  weight = 30
+
+[[menus.main]]
+  name = "分类"
+  pageRef = "/categories"
+  weight = 40
+
+[[menus.main]]
+  name = "标签"
+  pageRef = "/tags"
+  weight = 50
+
+[[menus.main]]
+  name = "关于"
+  pageRef = "/about"
+  weight = 60

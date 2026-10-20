@@ -1,0 +1,54 @@
+{{ define "main" }}
+{{ $paginator := .Paginate .Pages.ByDate.Reverse 10 }}
+<section class="list-wrap">
+  <div class="list-card">
+    <header class="list-header">
+      <div class="kicker">Archive / Topic</div>
+      <h1>{{ .Title }}</h1>
+      {{ with .Description }}<p>{{ . }}</p>{{ end }}
+    </header>
+
+    {{ if $paginator.Pages }}
+      <div class="article-list">
+        {{ range $paginator.Pages }}
+          <article class="article-row">
+            <div class="article-thumb" aria-hidden="true"></div>
+            <div>
+              <div class="article-date">{{ .Date.Format (site.Params.dateFormat | default "2006-01-02") }} · {{ .ReadingTime }} 分钟阅读</div>
+              <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+              <p>{{ .Summary | plainify | truncate 170 }}</p>
+              <div class="tag-list">
+                {{ range first 4 (.GetTerms "tags") }}
+                  <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+                {{ end }}
+              </div>
+            </div>
+          </article>
+        {{ end }}
+      </div>
+
+      {{ if gt $paginator.TotalPages 1 }}
+        <nav class="pagination" aria-label="分页">
+          {{ if $paginator.HasPrev }}
+            <a href="{{ $paginator.Prev.URL }}" rel="prev">上一页</a>
+          {{ else }}
+            <span class="disabled">上一页</span>
+          {{ end }}
+
+          {{ range $paginator.Pagers }}
+            <a href="{{ .URL }}"{{ if eq .PageNumber $paginator.PageNumber }} class="active" aria-current="page"{{ end }}>{{ .PageNumber }}</a>
+          {{ end }}
+
+          {{ if $paginator.HasNext }}
+            <a href="{{ $paginator.Next.URL }}" rel="next">下一页</a>
+          {{ else }}
+            <span class="disabled">下一页</span>
+          {{ end }}
+        </nav>
+      {{ end }}
+    {{ else }}
+      <p class="empty-state">这里还没有文章。</p>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

@@ -1,0 +1,31 @@
+{{ define "main" }}
+<section class="content-wrap">
+  <div class="content-card">
+    <header class="article-header">
+      <div class="kicker">Topics</div>
+      <h1>{{ .Title }}</h1>
+      <p class="subtitle">按主题浏览文章，找到你关心的方向。</p>
+    </header>
+
+    {{ if .Data.Terms }}
+      <div class="taxonomy-grid">
+        {{ range .Data.Terms.Alphabetical }}
+          <article class="taxonomy-card">
+            <div class="taxonomy-card-top">
+              <h3><a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }}</a></h3>
+              <span class="term-count">{{ .Count }} 篇</span>
+            </div>
+            <ul>
+              {{ range first 8 .Pages }}
+                <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+              {{ end }}
+            </ul>
+          </article>
+        {{ end }}
+      </div>
+    {{ else }}
+      <p class="empty-state">还没有设置分类或标签。</p>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
