@@ -1,29 +1,27 @@
 {{ define "main" }}
 {{ $posts := where site.RegularPages "Section" "posts" }}
-<section class="archive-wrap">
-  <div class="content-card">
-    <header class="article-header">
-      <div class="kicker">Timeline</div>
-      <h1>{{ .Title }}</h1>
-      <p class="subtitle">{{ .Description }}</p>
-    </header>
+<header class="page-head">
+  <p class="eyebrow">Timeline</p>
+  <h1>{{ .Title }}</h1>
+  <p>{{ .Description }}</p>
+</header>
 
-    {{ range $posts.ByDate.Reverse.GroupByDate "2006" }}
-      <section class="archive-year">
-        <h2>{{ .Key }}</h2>
-        <ul class="archive-list">
-          {{ range .Pages }}
-            <li class="archive-item">
-              <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "01-02" }}</time>
-              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-              <span>{{ .ReadingTime }} 分钟</span>
-            </li>
-          {{ end }}
-        </ul>
-      </section>
-    {{ else }}
-      <p class="empty-state">还没有已发布的文章。</p>
-    {{ end }}
-  </div>
-</section>
+<div class="page-body">
+  {{ range $posts.ByDate.Reverse.GroupByDate "2006" }}
+    <section class="archive-year">
+      <h2>{{ .Key }}</h2>
+      <ul class="archive-list">
+        {{ range .Pages }}
+          <li class="archive-item">
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "01-02" }}</time>
+            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+            <span>{{ .ReadingTime }} 分钟</span>
+          </li>
+        {{ end }}
+      </ul>
+    </section>
+  {{ else }}
+    <p class="empty-state">还没有已发布的文章。</p>
+  {{ end }}
+</div>
 {{ end }}

@@ -3,6 +3,7 @@
   {{- $description = .Summary | plainify | truncate 160 -}}
 {{- end -}}
 {{- $title := cond .IsHome site.Title (printf "%s · %s" .Title site.Title) -}}
+{{- if eq .Kind "404" -}}{{- $title = printf "页面不存在 · %s" site.Title -}}{{- end -}}
 <title>{{ $title }}</title>
 <meta name="description" content="{{ $description }}" />
 <meta name="author" content="{{ site.Params.author }}" />

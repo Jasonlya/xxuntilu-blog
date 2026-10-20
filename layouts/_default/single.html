@@ -1,78 +1,77 @@
 {{ define "main" }}
 {{ $showTOC := and (ne .Params.toc false) .Fragments.Headings }}
-<section class="single-wrap">
-  <div class="article-layout">
-    <article class="single-card">
-      <header class="article-header">
-        <div class="meta-row">
-          {{ range .GetTerms "categories" }}
-            <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
-          {{ end }}
-          <span>{{ .Date.Format (site.Params.dateFormat | default "2006-01-02") }}</span>
-          <span>{{ .ReadingTime }} 分钟阅读</span>
-          <span>{{ .WordCount }} 字</span>
-        </div>
-
-        <h1>{{ .Title }}</h1>
-        {{ with .Description }}<p class="subtitle">{{ . }}</p>{{ end }}
-      </header>
-
-      <div class="article-content">
-        {{ .Content }}
+<div class="article-shell{{ if not $showTOC }} no-toc{{ end }}">
+  <article class="article-main">
+    <header class="article-head">
+      <p class="eyebrow">
+        {{ with .GetTerms "categories" }}{{ with index . 0 }}<a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}{{ else }}文章{{ end }}
+      </p>
+      <h1>{{ .Title }}</h1>
+      {{ with .Description }}<p class="article-dek">{{ . }}</p>{{ end }}
+      <div class="article-meta">
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format (site.Params.dateFormat | default "2006-01-02") }}</time>
+        <span>{{ .ReadingTime }} 分钟阅读</span>
+        <span>{{ .WordCount }} 字</span>
+        {{ if ne .Lastmod .Date }}<span>更新于 {{ .Lastmod.Format (site.Params.dateFormat | default "2006-01-02") }}</span>{{ end }}
       </div>
-
-      <footer class="article-footer">
-        {{ with .GetTerms "tags" }}
-          <h2>标签</h2>
-          <div class="article-tags">
-            {{ range . }}<a href="{{ .RelPermalink }}"># {{ .LinkTitle }}</a>{{ end }}
-          </div>
-        {{ end }}
-
-        {{ if or .PrevInSection .NextInSection }}
-          <nav class="prev-next" aria-label="上一篇和下一篇">
-            {{ with .PrevInSection }}
-              <a href="{{ .RelPermalink }}">
-                <span>上一篇</span>
-                <strong>{{ .Title }}</strong>
-              </a>
-            {{ else }}<span></span>{{ end }}
-            {{ with .NextInSection }}
-              <a class="next" href="{{ .RelPermalink }}">
-                <span>下一篇</span>
-                <strong>{{ .Title }}</strong>
-              </a>
-            {{ end }}
-          </nav>
-        {{ end }}
-      </footer>
-    </article>
+    </header>
 
     {{ if $showTOC }}
-      <aside class="article-aside">
-        <div class="toc-card">
-          <h2>目录</h2>
-          {{ .TableOfContents }}
-        </div>
-      </aside>
+      <details class="toc-mobile">
+        <summary>目录</summary>
+        {{ .TableOfContents }}
+      </details>
     {{ end }}
-  </div>
 
-  {{ $related := site.RegularPages.Related . | first 3 }}
-  {{ with $related }}
-    <section class="related" aria-labelledby="related-title">
-      <h2 id="related-title">相关文章</h2>
-      <div class="related-grid">
-        {{ range . }}
-          <a class="related-card" href="{{ .RelPermalink }}">
-            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format (site.Params.dateFormat | default "2006-01-02") }}</time>
-            <strong>{{ .Title }}</strong>
-          </a>
-        {{ end }}
+    <div class="article-content">
+      {{ .Content }}
+    </div>
+
+    <footer class="article-footer">
+      {{ with .GetTerms "tags" }}
+        <h2>标签</h2>
+        <div class="article-tags">
+          {{ range . }}<a href="{{ .RelPermalink }}"># {{ .LinkTitle }}</a>{{ end }}
+        </div>
+      {{ end }}
+
+      {{ if or .PrevInSection .NextInSection }}
+        <nav class="prev-next" aria-label="上一篇和下一篇">
+          {{ with .PrevInSection }}
+            <a href="{{ .RelPermalink }}"><span>上一篇</span><strong>{{ .Title }}</strong></a>
+          {{ else }}<span></span>{{ end }}
+          {{ with .NextInSection }}
+            <a class="next" href="{{ .RelPermalink }}"><span>下一篇</span><strong>{{ .Title }}</strong></a>
+          {{ end }}
+        </nav>
+      {{ end }}
+    </footer>
+
+    {{ $related := site.RegularPages.Related . | first 3 }}
+    {{ with $related }}
+      <section class="related" aria-labelledby="related-title">
+        <h2 id="related-title">相关文章</h2>
+        <div class="related-grid">
+          {{ range . }}
+            <a class="related-card" href="{{ .RelPermalink }}">
+              <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format (site.Params.dateFormat | default "2006-01-02") }}</time>
+              <strong>{{ .Title }}</strong>
+            </a>
+          {{ end }}
+        </div>
+      </section>
+    {{ end }}
+
+    {{ partial "comments.html" . }}
+  </article>
+
+  {{ if $showTOC }}
+    <aside class="article-aside">
+      <div class="toc-card">
+        <h2>目录</h2>
+        {{ .TableOfContents }}
       </div>
-    </section>
+    </aside>
   {{ end }}
-
-  {{ partial "comments.html" . }}
-</section>
+</div>
 {{ end }}
